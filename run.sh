@@ -26,15 +26,15 @@ fi
 # Set debconf values and reconfigure Exim and Mailman. For some reason, dpkg-reconfigure exim4-config does not seem to work.
 echo -n "Setting up Exim..."
 {
-	apt-get remove --purge -y exim4 exim4-base exim4-config exim4-daemon-light
+	apt-get remove --purge -y exim4 exim4-base exim4-config exim4-daemon-light	
 	debconf-set-selections /exim4-config.cfg
-	echo ${EMAIL_FQDN} > /etc/mailname
+	echo ${EMAIL_FQDN} > /etc/mailname		
 	apt-get install -y exim4
 } &>/dev/null
 echo ' Done.'	
 
 echo -n "Setting up Mailman..."
-{
+{	
 	debconf-set-selections /mailman-config.cfg
 	dpkg-reconfigure mailman
 } &>/dev/null
@@ -58,10 +58,25 @@ echo 'SMTPPORT = 0' >> $mailmancfg
 
 echo -n "Initializing mailing lists..."
 {
-	/usr/sbin/mmsitepass ${MASTER_PASSWORD}
+	/usr/sbin/mmsitepass ${MASTER_PASSWORD}	
 	/usr/sbin/newlist -q -l ${LIST_LANGUAGE_CODE} mailman ${LIST_ADMIN} ${MASTER_PASSWORD}
 } &>/dev/null
 echo ' Done.'
+
+# Addaliases and update them:
+cat << EOA >> /etc/aliases
+mailman:              "|/var/lib/mailman/mail/mailman post mailman"
+mailman-admin:        "|/var/lib/mailman/mail/mailman admin mailman"
+mailman-bounces:      "|/var/lib/mailman/mail/mailman bounces mailman"
+mailman-confirm:      "|/var/lib/mailman/mail/mailman confirm mailman"
+mailman-join:         "|/var/lib/mailman/mail/mailman join mailman"
+mailman-leave:        "|/var/lib/mailman/mail/mailman leave mailman"
+mailman-owner:        "|/var/lib/mailman/mail/mailman owner mailman"
+mailman-request:      "|/var/lib/mailman/mail/mailman request mailman"
+mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
+mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
+EOA
+/usr/bin/newaliases
 
 echo -n "Setting up Apache web server..."
 {
