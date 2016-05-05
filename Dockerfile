@@ -7,13 +7,14 @@ ENV MASTER_PASSWORD example
 ENV LIST_LANGUAGE_CODE en
 ENV LIST_LANGUAGE_NAME English
 ENV LIST_ADMIN admin@lists.example.com
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 RUN apt-get update
 RUN apt-get -y upgrade
 
-RUN apt-get install -y mailman exim4 apache2 vim debconf-utils tree
+RUN apt-get install -y mailman exim4 apache2
 
 COPY 00_local_macros /etc/exim4/conf.d/main/
 COPY 04_exim4-config_mailman /etc/exim4/conf.d/main/
