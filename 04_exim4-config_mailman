@@ -1,0 +1,30 @@
+# start
+# Home dir for your Mailman installation -- aka Mailman's prefix
+# directory.
+# By default this is set to "/usr/local/mailman"
+# On a Red Hat/Fedora system using the RPM use "/var/mailman"
+# On Debian using the deb package use "/var/lib/mailman"
+# This is normally the same as ~mailman
+MM_HOME=/var/lib/mailman
+#
+# User and group for Mailman, should match your --with-mail-gid
+# switch to Mailman's configure script.  Value is normally "mailman"
+MM_UID=list
+MM_GID=list
+#
+# Domains that your lists are in - colon separated list
+# you may wish to add these into local_domains as well
+domainlist mm_domains=lists.example.com
+#
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#
+# These values are derived from the ones above and should not need
+# editing unless you have munged your mailman installation
+#
+# The path of the Mailman mail wrapper script
+MM_WRAP=MM_HOME/mail/mailman
+#
+# The path of the list config file (used as a required file when
+# verifying list addresses)
+MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
+# end

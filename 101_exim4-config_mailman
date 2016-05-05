@@ -1,0 +1,9 @@
+mailman_router:
+   driver = accept
+   require_files = MM_HOME/lists/$local_part/config.pck
+   local_part_suffix_optional
+   local_part_suffix = -bounces : -bounces+* : \
+                       -confirm+* : -join : -leave : \
+                       -owner : -request : -admin
+   domains = +mm_domains
+   transport = mailman_transport

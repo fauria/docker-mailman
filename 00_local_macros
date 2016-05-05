@@ -1,0 +1,4 @@
+DKIM_CANON = relaxed
+DKIM_SELECTOR = 20150726
+DKIM_DOMAIN = lists.example.com
+DKIM_FILE = /private.pem
