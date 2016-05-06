@@ -3,6 +3,12 @@
 # See: http://www.exim.org/howto/mailman21.html
 # and: https://help.ubuntu.com/community/Mailman
 # and: https://debian-administration.org/article/718/DKIM-signing_outgoing_mail_with_exim4
+if [ $DEBUG_CONTAINER == 'true' ]; then
+	outfile='/dev/console'
+else
+	outfile='/dev/null'
+fi
+
 mailmancfg='/etc/mailman/mm_cfg.py'
 
 cat << EOB
@@ -30,14 +36,14 @@ echo -n "Setting up Exim..."
 	debconf-set-selections /exim4-config.cfg
 	echo ${EMAIL_FQDN} > /etc/mailname		
 	apt-get install -y exim4
-} &>/dev/null
+} &>$outfile
 echo ' Done.'	
 
 echo -n "Setting up Mailman..."
 {	
 	debconf-set-selections /mailman-config.cfg
 	dpkg-reconfigure mailman
-} &>/dev/null
+} &>$outfile
 echo ' Done.'
 
 # Replace default hostnames with runtime values:
@@ -60,7 +66,7 @@ echo -n "Initializing mailing lists..."
 {
 	/usr/sbin/mmsitepass ${MASTER_PASSWORD}	
 	/usr/sbin/newlist -q -l ${LIST_LANGUAGE_CODE} mailman ${LIST_ADMIN} ${MASTER_PASSWORD}
-} &>/dev/null
+} &>$outfile
 echo ' Done.'
 
 # Addaliases and update them:
@@ -82,13 +88,17 @@ echo -n "Setting up Apache web server..."
 {
 	a2enmod cgi
 	a2ensite mailman.conf
-} &>/dev/null
+} &>$outfile
 
-echo -n "Generating RSA keys for DKIM..."
+echo -n "Setting up RSA keys for DKIM..."
 {
-	openssl genrsa -out private.pem 2048 -outform PEM
-	openssl rsa -in private.pem -out public.pem -pubout -outform PEM
-} &>/dev/null
+	if [ ! -f /etc/exim4/tls.d/private.pem ]; then
+		mkdir -p /etc/exim4/tls.d
+		openssl genrsa -out /etc/exim4/tls.d/private.pem 2048 -outform PEM
+		openssl rsa -in /etc/exim4/tls.d/private.pem -out /etc/exim4/tls.d/public.pem -pubout -outform PEM
+	fi
+	chgrp -R Debian-exim /etc/exim4
+} &>$outfile
 echo ' Done.'
 
 key=$(sed -e '/^-/d' public.pem|paste -sd '' -)
@@ -98,14 +108,14 @@ echo -n "Fixing permissons and finishing setup..."
 {
 	update-exim4.conf
 	/usr/lib/mailman/bin/check_perms -f
-} &>/dev/null
+} &>$outfile
 echo ' Done.'
 
 echo -n "Starting up services..."
 {
 	/etc/init.d/exim4 start
 	/etc/init.d/mailman start
-} &>/dev/null
+} &>$outfile
 echo ' Done.'
 
 cat << EOB

@@ -1,4 +1,4 @@
 DKIM_CANON = relaxed
 DKIM_SELECTOR = 20150726
 DKIM_DOMAIN = lists.example.com
-DKIM_FILE = /private.pem
+DKIM_FILE = /etc/exim4/tls.d/private.pem
