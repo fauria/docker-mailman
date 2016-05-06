@@ -97,3 +97,30 @@ Recommendations
 2. Make sure you can add TXT records in your domain's DNS master zone. 
 
 3. In addition to [DKIM](https://www.linode.com/docs/networking/dns/dns-records-an-introduction#dkim), consider adding an [SPF](https://www.linode.com/docs/networking/dns/dns-records-an-introduction#spf) to set your server as the only one originating email for the list domain.
+
+Use cases
+----
+
+1. Create a temporary container for testing purposes:
+ 
+```
+	docker run --rm fauria/lap
+```
+
+2. Create a temporary container to debug a web app:
+ 
+```
+	docker run --rm -p 8080:80 -e LOG_STDOUT=true -e LOG_STDERR=true -e LOG_LEVEL=debug -v /my/data/directory:/var/www/html fauria/lap
+```
+
+3. Create a container linking to another [MySQL container](https://registry.hub.docker.com/_/mysql/):
+
+```
+	docker run -d --link my-mysql-container:mysql -p 8080:80 -v /my/data/directory:/var/www/html -v /my/logs/directory:/var/log/httpd --name my-lap-container fauria/lap
+```
+
+
+
+uid=105(Debian-exim) gid=108(Debian-exim) groups=108(Debian-exim)
+uid=38(list) gid=38(list) groups=38(list)
+uid=33(www-data) gid=33(www-data) groups=33(www-data)

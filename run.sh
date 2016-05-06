@@ -101,7 +101,7 @@ echo -n "Setting up RSA keys for DKIM..."
 } &>$outfile
 echo ' Done.'
 
-key=$(sed -e '/^-/d' public.pem|paste -sd '' -)
+key=$(sed -e '/^-/d' /etc/exim4/tls.d/public.pem|paste -sd '' -)
 ts=$(date +%Y%m%d)
 
 echo -n "Fixing permissons and finishing setup..."
