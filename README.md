@@ -1,7 +1,7 @@
 fauria/mailman
 ==========
 
-![docker_logo](https://googledrive.com/host/0B7q6BLMXak9VfkpQY3YzNldlSmtxRTZCMEtEVlhhR3QtMFc3aEYzVzA5YlM5MWw5OXhqV0U/docker_139x115.png)![docker_fauria_logo](https://googledrive.com/host/0B7q6BLMXak9VfkpQY3YzNldlSmtxRTZCMEtEVlhhR3QtMFc3aEYzVzA5YlM5MWw5OXhqV0U/docker_fauria_161x115.png)
+![docker_logo](https://github.com/fauria/docker-mailman/blob/master/docker_139x115.png)![docker_fauria_logo](https://github.com/fauria/docker-mailman/blob/master/docker_fauria_161x115.png)
 
 This Docker container ships a full [GNU Mailman](https://www.gnu.org/software/mailman/) solution based on Ubuntu 16.04. It allows the deployment of a working mailing list service with a single command line.
 
