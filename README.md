@@ -80,7 +80,7 @@ This image uses several environment variables to define different values to be u
 * Accepted values: `false`, `true`
 * Description: Used to control the output of the container. By default, only relevant information will be displayed. If you want to output every command executed during setup, run the container with `-e DEBUG_CONTAINER=true`.
 
-Exposed port and volumnes
+Exposed port and volumes
 ----
 
 The image exposes ports `80` and `25`, corresponding to Apache and Exim respectively.
