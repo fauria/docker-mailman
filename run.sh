@@ -63,7 +63,8 @@ echo 'SMTPHOST = "localhost"' >> $mailmancfg
 echo 'SMTPPORT = 0' >> $mailmancfg
 
 # remove mm_cfg.pyc, to ensure the new values are picked up
-rm "${mailmancfg}c"
+rm -f "${mailmancfg}c"
+rm -f "/var/lib/mailman/Mailman/mm_cfg.pyc"
 
 echo -n "Initializing mailing lists..."
 {
