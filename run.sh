@@ -12,7 +12,7 @@ fi
 mailmancfg='/etc/mailman/mm_cfg.py'
 
 cat << EOB
-    
+
     ***********************************************
     *                                             *
     *   Docker image: fauria/mailman              *
@@ -32,15 +32,15 @@ fi
 # Set debconf values and reconfigure Exim and Mailman. For some reason, dpkg-reconfigure exim4-config does not seem to work.
 echo -n "Setting up Exim..."
 {
-	apt-get remove --purge -y exim4 exim4-base exim4-config exim4-daemon-light	
+	apt-get remove --purge -y exim4 exim4-base exim4-config exim4-daemon-light
 	debconf-set-selections /exim4-config.cfg
-	echo ${EMAIL_FQDN} > /etc/mailname		
+	echo ${EMAIL_FQDN} > /etc/mailname
 	apt-get install -y exim4
 } &>$outfile
-echo ' Done.'	
+echo ' Done.'
 
 echo -n "Setting up Mailman..."
-{	
+{
 	debconf-set-selections /mailman-config.cfg
 	dpkg-reconfigure mailman
 } &>$outfile
@@ -62,9 +62,12 @@ echo 'MAX_DELIVERY_THREADS = 0' >> $mailmancfg
 echo 'SMTPHOST = "localhost"' >> $mailmancfg
 echo 'SMTPPORT = 0' >> $mailmancfg
 
+# remove mm_cfg.pyc, to ensure the new values are picked up
+rm "${mailmancfg}c"
+
 echo -n "Initializing mailing lists..."
 {
-	/usr/sbin/mmsitepass ${MASTER_PASSWORD}	
+	/usr/sbin/mmsitepass ${MASTER_PASSWORD}
 	/usr/sbin/newlist -q -l ${LIST_LANGUAGE_CODE} mailman ${LIST_ADMIN} ${MASTER_PASSWORD}
 } &>$outfile
 echo ' Done.'
@@ -119,7 +122,7 @@ echo -n "Starting up services..."
 echo ' Done.'
 
 cat << EOB
-    
+
     ***********************************************
     *                                             *
     *   TO COMPLETE DKIM SETUP, COPY THE          *
