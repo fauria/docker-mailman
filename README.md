@@ -18,7 +18,7 @@ The following components are included:
  * Apache HTTP Server 2.4
  * Exim 4.8
 
-Installation from [Docker registry hub](https://registry.hub.docker.com/u/fauria/mailman/).
+Installation from [Docker registry hub](https://registry.hub.docker.com/r/fauria/mailman/).
 ----
 
 You can download the image using the following command:
